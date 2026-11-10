@@ -2,6 +2,8 @@
 
 Python script that gets current weather for a city using Llama 3.1 via OpenRouter API.
 
+**Repository:** https://github.com/b11dg/ai-engineer-weather-app
+
 ## Prerequisites
 
 - Python 3.8+
@@ -11,8 +13,8 @@ Python script that gets current weather for a city using Llama 3.1 via OpenRoute
 
 ```bash
 # 1. Clone the repository
-git clone <repository-url>
-cd ai-engineer-course
+git clone https://github.com/b11dg/ai-engineer-weather-app.git
+cd ai-engineer-weather-app
 
 # 2. Create virtual environment
 python3 -m venv venv
