@@ -3,7 +3,7 @@ Temperature arena: send the same prompt to the same model twice,
 once with temperature 0 and once with a high temperature, and compare.
 
 API:    OpenRouter (key in ../.env as MODEL_API_KEY)
-Model:  NVIDIA Nemotron 3 Ultra
+Model:  NVIDIA Nemotron 3 Ultra, free tier (no credits charged)
 """
 
 import os
@@ -16,7 +16,7 @@ load_dotenv(Path(__file__).resolve().parent.parent / ".env")
 
 MODEL_API_KEY = os.getenv("MODEL_API_KEY")
 BASE_URL = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = "nvidia/nemotron-3-ultra-550b-a55b"
+MODEL = "nvidia/nemotron-3-ultra-550b-a55b:free"
 
 TEMPERATURES = [0.0, 1.0]
 
@@ -51,7 +51,8 @@ def ask(prompt: str, temperature: float) -> str:
     try:
         response = requests.post(BASE_URL, headers=headers, json=payload, timeout=180)
         response.raise_for_status()
-        return response.json()["choices"][0]["message"]["content"].strip()
+        content = response.json()["choices"][0]["message"]["content"]
+        return (content or "").strip() or "Error: empty answer (try raising max_tokens)"
     except requests.exceptions.RequestException as e:
         return f"Error: {e}"
     except (KeyError, IndexError):

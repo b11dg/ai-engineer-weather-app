@@ -8,10 +8,10 @@ Homework for the AI Engineer course, organized by module.
 
 | Module | Project | Location |
 |--------|---------|----------|
-| 1 | Weather Assistant: current weather for a city via an LLM | [`weather.py`](weather.py) (repo root) |
+| 1 | Weather Assistant: real current weather for a city, described by an LLM | [`module_1/`](module_1/README.md) |
 | 2 | Temperature Arena: same prompt at temperature 0 and 1, compared | [`module_2/`](module_2/README.md) |
 
-All modules share one virtual environment, one `requirements.txt` and one `.env` in the repo root.
+Both modules use free OpenRouter models (`:free` suffix), so no credits are charged. All modules share one virtual environment, one `requirements.txt` and one `.env` in the repo root.
 
 ## Setup
 
@@ -40,22 +40,17 @@ cp .env.example .env
 
 ## Module 1: Weather Assistant
 
-Python script that gets current weather for a city using Llama 3.1 via OpenRouter API.
-
-### Usage
+Gets real current weather for a city from [Open-Meteo](https://open-meteo.com) (free, no key) and has NVIDIA Nemotron 3.5 Lightning (free tier, `nvidia/nemotron-3.5-lightning:free`) turn it into a short, friendly answer via the OpenRouter API. Details (in Russian) are in [`module_1/README.md`](module_1/README.md).
 
 ```
-$ python weather.py
+$ python module_1/weather.py
 In which city are you interested in the weather? London
-The current weather in London is:
-* Temperature: 12°C (54°F)
-* Conditions: Overcast with light rain showers
-...
+At 7°C in London, it feels more like 3.6°C with a clear sky and 52% humidity. ...
 ```
 
 ## Module 2: Temperature Arena
 
-Sends the same prompt to NVIDIA Nemotron 3 Ultra at temperature 0.0 and 1.0 and prints both answers for comparison. Details, observations and conclusions (in Russian) are in [`module_2/README.md`](module_2/README.md).
+Sends the same prompt to NVIDIA Nemotron 3 Ultra (free tier, `nvidia/nemotron-3-ultra-550b-a55b:free`) at temperature 0.0 and 1.0 and prints both answers for comparison. Details, observations and conclusions (in Russian) are in [`module_2/README.md`](module_2/README.md).
 
 ```bash
 python module_2/arena.py
@@ -65,7 +60,9 @@ python module_2/arena.py
 
 ```
 .
-├── weather.py          # Module 1: weather assistant
+├── module_1/
+│   ├── weather.py      # Module 1: weather assistant
+│   └── README.md       # Module 1 description
 ├── module_2/
 │   ├── arena.py        # Module 2: temperature arena
 │   └── README.md       # Module 2 description and findings
@@ -78,7 +75,7 @@ python module_2/arena.py
 
 ## Dependencies
 
-- `requests` - HTTP library for API calls
+- `requests` - HTTP library for API calls (OpenRouter, Open-Meteo)
 - `python-dotenv` - Load environment variables from .env file
 
 ## License
