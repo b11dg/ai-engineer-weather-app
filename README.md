@@ -1,40 +1,48 @@
-# Weather Assistant
+# AI Engineer Course
 
-Python script that gets current weather for a city using Llama 3.1 via OpenRouter API.
+Homework for the AI Engineer course, organized by module.
 
 **Repository:** https://github.com/b11dg/ai-engineer-weather-app
 
-## Prerequisites
+## Modules
+
+| Module | Project | Location |
+|--------|---------|----------|
+| 1 | Weather Assistant: current weather for a city via an LLM | [`weather.py`](weather.py) (repo root) |
+| 2 | Temperature Arena: same prompt at temperature 0 and 1, compared | [`module_2/`](module_2/README.md) |
+
+All modules share one virtual environment, one `requirements.txt` and one `.env` in the repo root.
+
+## Setup
 
 - Python 3.8+
 - OpenRouter API key (get one at https://openrouter.ai)
-
-## Quick Start
 
 ```bash
 # 1. Clone the repository
 git clone https://github.com/b11dg/ai-engineer-weather-app.git
 cd ai-engineer-weather-app
 
-# 2. Create virtual environment
+# 2. Create and activate a virtual environment
 python3 -m venv venv
-
-# 3. Activate virtual environment
 source venv/bin/activate  # Linux/macOS
 # venv\Scripts\activate   # Windows
 
-# 4. Install dependencies
+# 3. Install dependencies
 pip install -r requirements.txt
 
-# 5. Configure API key
+# 4. Configure API key
 cp .env.example .env
-# Edit .env and add your OpenRouter API key
-
-# 6. Run
-python weather.py
+# Edit .env and set MODEL_API_KEY to your OpenRouter API key
 ```
 
-## Usage
+---
+
+## Module 1: Weather Assistant
+
+Python script that gets current weather for a city using Llama 3.1 via OpenRouter API.
+
+### Usage
 
 ```
 $ python weather.py
@@ -45,14 +53,25 @@ The current weather in London is:
 ...
 ```
 
+## Module 2: Temperature Arena
+
+Sends the same prompt to NVIDIA Nemotron 3 Ultra at temperature 0.0 and 1.0 and prints both answers for comparison. Details, observations and conclusions (in Russian) are in [`module_2/README.md`](module_2/README.md).
+
+```bash
+python module_2/arena.py
+```
+
 ## Project Structure
 
 ```
 .
-├── weather.py          # Main script
-├── requirements.txt    # Python dependencies
+├── weather.py          # Module 1: weather assistant
+├── module_2/
+│   ├── arena.py        # Module 2: temperature arena
+│   └── README.md       # Module 2 description and findings
+├── requirements.txt    # Python dependencies (shared)
 ├── .env.example        # Environment variables template
-├── .env                # Your API keys (not committed)
+├── .env                # Your API key (not committed)
 ├── .gitignore          # Git ignore rules
 └── venv/               # Virtual environment (not committed)
 ```
