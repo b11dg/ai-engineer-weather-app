@@ -11,3 +11,5 @@ ENV/
 .env.*.local
 *.log
 .DS_Store
+.vscode/
+module_3/data.json

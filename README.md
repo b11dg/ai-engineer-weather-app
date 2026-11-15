@@ -10,8 +10,9 @@ Homework for the AI Engineer course, organized by module.
 |--------|---------|----------|
 | 1 | Weather Assistant: real current weather for a city, described by an LLM | [`module_1/`](module_1/README.md) |
 | 2 | Temperature Arena: same prompt at temperature 0 and 1, compared | [`module_2/`](module_2/README.md) |
+| 3 | Support Message Extractor: customer message to a structured JSON ticket | [`module_3/`](module_3/README.md) |
 
-Both modules use free OpenRouter models (`:free` suffix), so no credits are charged. All modules share one virtual environment, one `requirements.txt` and one `.env` in the repo root.
+All modules use free OpenRouter models (`:free` suffix), so no credits are charged. All modules share one virtual environment, one `requirements.txt` and one `.env` in the repo root.
 
 ## Setup
 
@@ -56,6 +57,14 @@ Sends the same prompt to NVIDIA Nemotron 3 Ultra (free tier, `nvidia/nemotron-3-
 python module_2/arena.py
 ```
 
+## Module 3: Support Message Extractor
+
+A customer types a support message in the terminal. NVIDIA Nemotron 3.5 Super VL (free tier, `nvidia/nemotron-3.5-super-vl:free`) reads it with a System Prompt and, in JSON Mode, returns a structured ticket: name, email, order ID, category, sentiment, urgency, summary, requested actions and a draft reply. The script parses the JSON, prints it nicely, handles invalid JSON with try/except, and appends every ticket to `module_3/data.json` (created on the first run). It also guards against prompt injection and limits the message and the answer to 4000 characters each. It calls OpenRouter through the `openai` library. Details (in Russian) are in [`module_3/README.md`](module_3/README.md).
+
+```bash
+python module_3/extractor.py
+```
+
 ## Project Structure
 
 ```
@@ -66,6 +75,10 @@ python module_2/arena.py
 ├── module_2/
 │   ├── arena.py        # Module 2: temperature arena
 │   └── README.md       # Module 2 description and findings
+├── module_3/
+│   ├── extractor.py    # Module 3: support message to JSON ticket
+│   ├── README.md       # Module 3 description
+│   └── docs/plan.md    # Module 3 implementation plan
 ├── requirements.txt    # Python dependencies (shared)
 ├── .env.example        # Environment variables template
 ├── .env                # Your API key (not committed)
@@ -77,6 +90,7 @@ python module_2/arena.py
 
 - `requests` - HTTP library for API calls (OpenRouter, Open-Meteo)
 - `python-dotenv` - Load environment variables from .env file
+- `openai` - OpenAI-compatible client, used with OpenRouter in module 3
 
 ## License
 
