@@ -11,6 +11,7 @@ Homework for the AI Engineer course, organized by module.
 | 1 | Weather Assistant: real current weather for a city, described by an LLM | [`module_1/`](module_1/README.md) |
 | 2 | Temperature Arena: same prompt at temperature 0 and 1, compared | [`module_2/`](module_2/README.md) |
 | 3 | Support Message Extractor: customer message to a structured JSON ticket | [`module_3/`](module_3/README.md) |
+| 4 | Smart Inventory Agent: Function Calling with a mock warehouse, in a desktop GUI | [`module_4/`](module_4/README.md) |
 
 All modules use free OpenRouter models (`:free` suffix), so no credits are charged. All modules share one virtual environment, one `requirements.txt` and one `.env` in the repo root.
 
@@ -65,6 +66,15 @@ A customer types a support message in the terminal. NVIDIA Nemotron 3.5 Super VL
 python module_3/extractor.py
 ```
 
+## Module 4: Smart Inventory Agent
+
+A desktop chat window (PyQt6, Windows/macOS/Linux) where a customer asks whether products are in stock. NVIDIA Nemotron 3.5 Super VL (free tier, `nvidia/nemotron-3.5-super-vl:free`) gets a `check_inventory` tool whose JSON Schema is generated from a Pydantic model (`"strict": true`, `"additionalProperties": false`). The app intercepts the model's `tool_calls`, validates the arguments with the same Pydantic model, runs a local mock warehouse function, sends the results back as `tool` messages and streams the final answer (`stream=True`) into the window. An agent log panel shows every step of the loop. Details (in Russian) are in [`module_4/README.md`](module_4/README.md).
+
+```bash
+python module_4/smart_agent.py        # GUI
+python module_4/smart_agent.py --cli  # terminal, no window
+```
+
 ## Project Structure
 
 ```
@@ -79,6 +89,9 @@ python module_3/extractor.py
 │   ├── extractor.py    # Module 3: support message to JSON ticket
 │   ├── README.md       # Module 3 description
 │   └── docs/plan.md    # Module 3 implementation plan
+├── module_4/
+│   ├── smart_agent.py  # Module 4: Function Calling agent with a GUI
+│   └── README.md       # Module 4 description
 ├── requirements.txt    # Python dependencies (shared)
 ├── .env.example        # Environment variables template
 ├── .env                # Your API key (not committed)
@@ -90,7 +103,9 @@ python module_3/extractor.py
 
 - `requests` - HTTP library for API calls (OpenRouter, Open-Meteo)
 - `python-dotenv` - Load environment variables from .env file
-- `openai` - OpenAI-compatible client, used with OpenRouter in module 3
+- `openai` - OpenAI-compatible client, used with OpenRouter in modules 3 and 4
+- `pydantic` - data models; module 4 builds the tool's JSON Schema from one and validates tool arguments
+- `PyQt6` - cross-platform GUI for module 4 (pinned to 6.9, the last Qt line that runs on macOS 12)
 
 ## License
 
