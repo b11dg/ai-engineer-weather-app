@@ -87,8 +87,7 @@ python module_4/smart_agent.py --cli  # terminal, no window
 │   └── README.md       # Module 2 description and findings
 ├── module_3/
 │   ├── extractor.py    # Module 3: support message to JSON ticket
-│   ├── README.md       # Module 3 description
-│   └── docs/plan.md    # Module 3 implementation plan
+│   └── README.md       # Module 3 description
 ├── module_4/
 │   ├── smart_agent.py  # Module 4: Function Calling agent with a GUI
 │   └── README.md       # Module 4 description
