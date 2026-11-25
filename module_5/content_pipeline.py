@@ -7,11 +7,16 @@ Chain 2 (writer):          {title} -> a short intro paragraph
 overall_chain runs chain 1, passes its output to chain 2 as {title}
 and returns the topic, the title and the intro together.
 
+Usage:
+    python module_5/content_pipeline.py           # invoke(): print when done
+    python module_5/content_pipeline.py --stream  # stream(): print as generated
+
 API:    OpenRouter via langchain-openai (key in ../.env as MODEL_API_KEY)
 Model:  NVIDIA Nemotron 3.5 Super VL, free tier
 """
 
 import os
+import sys
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -67,13 +72,47 @@ overall_chain = (
 )
 
 
-def main() -> None:
-    result = overall_chain.invoke({"topic": "Майбутнє космічного туризму"})
+TOPIC = "Майбутнє космічного туризму"
+
+
+def run_invoke() -> None:
+    """Wait for the whole pipeline, then print the result."""
+    result = overall_chain.invoke({"topic": TOPIC})
 
     print(f"Тема: {result['topic']}\n")
     print(result["title"].strip())
     print()
     print(result["intro"].strip())
+
+
+def run_stream() -> None:
+    """Print the title and the intro piece by piece as the model writes them.
+
+    stream() yields small dicts with one key each, in order:
+        {"topic": "..."}                  the input, at once
+        {"title": "Кос"}, {"title": ...}  chain 1 output, piece by piece
+        {"intro": "У"},   {"intro": ...}  chain 2 output, piece by piece
+    Chain 2 starts only after the whole title is ready, because its prompt
+    needs the full {title}.
+    """
+    current_key = None
+    for chunk in overall_chain.stream({"topic": TOPIC}):
+        for key, text in chunk.items():
+            if key != current_key:  # a new section: topic -> title -> intro
+                if current_key is not None:
+                    print("\n")
+                current_key = key
+                if key == "topic":
+                    print("Тема: ", end="")
+            print(text, end="", flush=True)  # flush shows each piece at once
+    print()
+
+
+def main() -> None:
+    if "--stream" in sys.argv[1:]:
+        run_stream()
+    else:
+        run_invoke()
 
 
 if __name__ == "__main__":

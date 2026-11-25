@@ -78,10 +78,11 @@ python module_4/smart_agent.py --cli  # terminal, no window
 
 ## Module 5: Content Pipeline
 
-Two LangChain chains joined into one pipeline with LCEL. Chain 1 (`prompt1 | model | StrOutputParser()`) turns a `{topic}` into one catchy article title. Chain 2 turns that `{title}` into a short intro paragraph. `RunnablePassthrough.assign()` passes the output of chain 1 into chain 2 as `title` and keeps the topic and the title in the result, so the script prints the whole thing. The model is NVIDIA Nemotron 3.5 Super VL (free tier, `nvidia/nemotron-3.5-super-vl:free`), called through `ChatOpenAI` from `langchain-openai` pointed at OpenRouter. Details (in Russian) are in [`module_5/README.md`](module_5/README.md).
+Two LangChain chains joined into one pipeline with LCEL. Chain 1 (`prompt1 | model | StrOutputParser()`) turns a `{topic}` into one catchy article title. Chain 2 turns that `{title}` into a short intro paragraph. `RunnablePassthrough.assign()` passes the output of chain 1 into chain 2 as `title` and keeps the topic and the title in the result, so the script prints the whole thing. By default it runs `overall_chain.invoke()` and prints the text when it is done; with `--stream` it runs `overall_chain.stream()` and prints the title and the intro piece by piece as the model writes them. The model is NVIDIA Nemotron 3.5 Super VL (free tier, `nvidia/nemotron-3.5-super-vl:free`), called through `ChatOpenAI` from `langchain-openai` pointed at OpenRouter. Details (in Russian) are in [`module_5/README.md`](module_5/README.md).
 
 ```bash
-python module_5/content_pipeline.py
+python module_5/content_pipeline.py           # invoke(): print the result when done
+python module_5/content_pipeline.py --stream  # stream(): print the text as it is generated
 ```
 
 ## Project Structure
@@ -101,7 +102,7 @@ python module_5/content_pipeline.py
 │   ├── smart_agent.py  # Module 4: Function Calling agent with a GUI
 │   └── README.md       # Module 4 description
 ├── module_5/
-│   ├── content_pipeline.py  # Module 5: two LCEL chains in one pipeline
+│   ├── content_pipeline.py  # Module 5: two LCEL chains in one pipeline (--stream to stream)
 │   └── README.md            # Module 5 description
 ├── requirements.txt    # Python dependencies (shared)
 ├── .env.example        # Environment variables template
