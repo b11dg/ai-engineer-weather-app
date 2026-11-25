@@ -12,6 +12,7 @@ Homework for the AI Engineer course, organized by module.
 | 2 | Temperature Arena: same prompt at temperature 0 and 1, compared | [`module_2/`](module_2/README.md) |
 | 3 | Support Message Extractor: customer message to a structured JSON ticket | [`module_3/`](module_3/README.md) |
 | 4 | Smart Inventory Agent: Function Calling with a mock warehouse, in a desktop GUI | [`module_4/`](module_4/README.md) |
+| 5 | Content Pipeline: two LangChain chains (title, then intro) joined with LCEL | [`module_5/`](module_5/README.md) |
 
 All modules use free OpenRouter models (`:free` suffix), so no credits are charged. All modules share one virtual environment, one `requirements.txt` and one `.env` in the repo root.
 
@@ -75,6 +76,14 @@ python module_4/smart_agent.py        # GUI
 python module_4/smart_agent.py --cli  # terminal, no window
 ```
 
+## Module 5: Content Pipeline
+
+Two LangChain chains joined into one pipeline with LCEL. Chain 1 (`prompt1 | model | StrOutputParser()`) turns a `{topic}` into one catchy article title. Chain 2 turns that `{title}` into a short intro paragraph. `RunnablePassthrough.assign()` passes the output of chain 1 into chain 2 as `title` and keeps the topic and the title in the result, so the script prints the whole thing. The model is NVIDIA Nemotron 3.5 Super VL (free tier, `nvidia/nemotron-3.5-super-vl:free`), called through `ChatOpenAI` from `langchain-openai` pointed at OpenRouter. Details (in Russian) are in [`module_5/README.md`](module_5/README.md).
+
+```bash
+python module_5/content_pipeline.py
+```
+
 ## Project Structure
 
 ```
@@ -91,6 +100,9 @@ python module_4/smart_agent.py --cli  # terminal, no window
 ├── module_4/
 │   ├── smart_agent.py  # Module 4: Function Calling agent with a GUI
 │   └── README.md       # Module 4 description
+├── module_5/
+│   ├── content_pipeline.py  # Module 5: two LCEL chains in one pipeline
+│   └── README.md            # Module 5 description
 ├── requirements.txt    # Python dependencies (shared)
 ├── .env.example        # Environment variables template
 ├── .env                # Your API key (not committed)
@@ -104,6 +116,8 @@ python module_4/smart_agent.py --cli  # terminal, no window
 - `python-dotenv` - Load environment variables from .env file
 - `openai` - OpenAI-compatible client, used with OpenRouter in modules 3 and 4
 - `pydantic` - data models; module 4 builds the tool's JSON Schema from one and validates tool arguments
+- `langchain-core` - prompts, output parser and `RunnablePassthrough` for the LCEL pipeline in module 5
+- `langchain-openai` - `ChatOpenAI` chat model, used with OpenRouter in module 5
 - `PyQt6` - cross-platform GUI for module 4 (pinned to 6.9, the last Qt line that runs on macOS 12)
 
 ## License
