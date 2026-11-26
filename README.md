@@ -13,6 +13,7 @@ Homework for the AI Engineer course, organized by module.
 | 3 | Support Message Extractor: customer message to a structured JSON ticket | [`module_3/`](module_3/README.md) |
 | 4 | Smart Inventory Agent: Function Calling with a mock warehouse, in a desktop GUI | [`module_4/`](module_4/README.md) |
 | 5 | Content Pipeline: two LangChain chains (title, then intro) joined with LCEL | [`module_5/`](module_5/README.md) |
+| 6 | Comment Moderator: a LangGraph state machine that routes a comment to a toxic, question or normal handler | [`module_6/`](module_6/README.md) |
 
 All modules use free OpenRouter models (`:free` suffix), so no credits are charged. All modules share one virtual environment, one `requirements.txt` and one `.env` in the repo root.
 
@@ -85,6 +86,14 @@ python module_5/content_pipeline.py           # invoke(): print the result when 
 python module_5/content_pipeline.py --stream  # stream(): print the text as it is generated
 ```
 
+## Module 6: Comment Moderator
+
+A LangGraph state machine that moderates blog comments. `AgentState` is a `TypedDict` with `comment`, `category` and `final_response`. The `analyze_comment` node asks NVIDIA Nemotron 3.5 Super VL (free tier, `nvidia/nemotron-3.5-super-vl:free`) for exactly one word — `TOXIC`, `QUESTION` or `NORMAL` — and a conditional edge routes on it: `toxic_handler` deletes the comment with a fixed reply, `qa_handler` asks the model for a polite answer, and `NORMAL` goes straight to `END`. The script runs the graph on three comments and prints every final state. Details (in Russian) are in [`module_6/README.md`](module_6/README.md).
+
+```bash
+python module_6/moderator_graph.py
+```
+
 ## Project Structure
 
 ```
@@ -104,6 +113,9 @@ python module_5/content_pipeline.py --stream  # stream(): print the text as it i
 ├── module_5/
 │   ├── content_pipeline.py  # Module 5: two LCEL chains in one pipeline (--stream to stream)
 │   └── README.md            # Module 5 description
+├── module_6/
+│   ├── moderator_graph.py   # Module 6: LangGraph comment moderation graph
+│   └── README.md            # Module 6 description
 ├── requirements.txt    # Python dependencies (shared)
 ├── .env.example        # Environment variables template
 ├── .env                # Your API key (not committed)
@@ -118,7 +130,8 @@ python module_5/content_pipeline.py --stream  # stream(): print the text as it i
 - `openai` - OpenAI-compatible client, used with OpenRouter in modules 3 and 4
 - `pydantic` - data models; module 4 builds the tool's JSON Schema from one and validates tool arguments
 - `langchain-core` - prompts, output parser and `RunnablePassthrough` for the LCEL pipeline in module 5
-- `langchain-openai` - `ChatOpenAI` chat model, used with OpenRouter in module 5
+- `langchain-openai` - `ChatOpenAI` chat model, used with OpenRouter in modules 5 and 6
+- `langgraph` - state graph with conditional edges for the comment moderator in module 6
 - `PyQt6` - cross-platform GUI for module 4 (pinned to 6.9, the last Qt line that runs on macOS 12)
 
 ## License
